@@ -1,0 +1,54 @@
+<html>
+    <head>
+	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	</head>
+
+<body>
+	    <h1 align="center"> User</h1>
+	    <div class="container" style="width:500px"id="user_data"> </div>
+	<div align="center">
+	<a class="btn btn-success " href="http://10.90.90.110:4000"> Back
+                     <span name="delete"  class="glyphicon"></span></a> </div>
+
+    <script>
+	    var url_string = window.location.href;
+        var url = new URL(url_string);
+        var id = url.searchParams.get("id");
+        
+	    var data = {_id:id};
+        console.log(id);
+         
+        fetch('viewUser', {method:'POST',headers: {'Accept': 'application/json, text/plain, */*',
+         'Content-Type': 'application/json'},dataType:'json', body:JSON.stringify(data)})
+      
+        .then(function(response) {
+            if(response.ok) return response.json();
+            throw new Error('Request failed.');
+        })
+    
+      .then(function(myJson){
+          var res = JSON.stringify(myJson);
+          var result = JSON.parse(res);
+
+          var users='';
+          console.log(result)
+           users+="<table class='table table-bordered' border='0' width='480px' cellpadding='0' cellspacing='0' align='center' >";
+          for(var i=0;i<result.data.length;i++)
+          { 
+            users+="<tr><td>ID</td><td>"+result.data[i]._id+"</td></tr><tr><td>name</td><td>"+result.data[i].name+"</td></tr><tr><td>email</td><td>"+result.data[i].email+"</td></tr><tr><td>phone</td><td>"+result.data[i].phone+"</td></tr></table>";
+          
+          }
+
+
+            document.getElementById("user_data").innerHTML = users;
+            
+
+      }) 
+        .catch(function(error) {
+        console.log(error);
+        });
+    </script>
+</body>
+
+</html>
